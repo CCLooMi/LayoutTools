@@ -22,7 +22,7 @@
                 .height(450)
                 .ok(function () { });
         }
-        var reg = / +/, regs=[pxReg = /^\d+px$/,pcReg=/^\d+%$/,frReg = /^\d+fr$/,autoReg=/^auto$/], tgList = [];
+        var reg = / +/, regs=[pxReg = /^\d+px$/,pcReg=/^\d+%$/,frReg = /^\d+fr$/,autoReg=/^auto$/];
         function mkDivider(ds, i, attrName , ...regs) {
             for (var j = 0, ri; j < regs.length; j++) {
                 ri = regs[j];
@@ -91,7 +91,6 @@
                             es.length = 0;
                             this.css('grid-template-rows', '');
                         }
-                        tgList.push(target);
                     })
                     .cancel(() => 0)
                     .onDestroy(unwatch);
@@ -150,7 +149,6 @@
                             this.css('grid-template-columns', '');
                             this.css('grid-template-rows', '');
                         }
-                        tgList.push(target);
                     })
                     .cancel(() => 0)
                     .onDestroy(unwatch);
@@ -241,7 +239,6 @@
                             this.css('grid-template-columns', '');
                             this.css('grid-template-rows', '');
                         }
-                        tgList.push(target);
                     })
                     .cancel(() => 0)
                     .onDestroy(() => (unwatchCols(), unwatchRows()));
@@ -251,16 +248,5 @@
             scope.items.push(...items);
             console.log(items);
         },console.error);
-        attacheEvent(document)
-            .on('keydown', function (e) {
-                if (e.ctrlKey && e.key == 'z') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    tgList.pop()?.undo();
-                }
-            })
-            .getDispose(function (dsp) {
-                watchInDomTree($ele, dsp);
-            });
     }]);
 })(Atom.app('LayoutTools'))

@@ -1,5 +1,10 @@
 <div icon="fan-loading">
+    <h1>Hi,Loading</h1>
     <script>
-        console.log(arguments);        
+        console.log([target,style,body,ce,cdf]);
+        target.html(body);
+        target.undo = function (){
+            target.html('');
+        }
     </script>
 </div>
