@@ -1,0 +1,46 @@
+<div cc-controller="mainCtrl" class="container"
+  style="grid-template-rows:1fr;grid-template-columns: 220px 1px 1fr;grid-gap:6px;">
+  <sv>
+    <div class="list">
+      <drop-item class="btn" cc-repeat="i in items" drop="i.drop" cc-bind-html="i.icon"></drop-item>
+      <a class="btn" icons="grid-code" cc-click="showCode()"></a>
+    </div>
+  </sv>
+  <divider cc-ew-resize="0"></divider>
+  <sv drop-area></sv>
+</div>
+<script type="text/less">
+  @box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);
+  .container{
+    padding:6px;
+    display:grid;
+    width:inherit;
+    height:inherit;
+  }
+  .list {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(70px,auto));
+    grid-template-rows:repeat(auto-fit,70px);
+    grid-gap:12px;
+    padding:12px;
+    drop-item{
+      display:grid;
+    }
+    .btn {
+      box-shadow: @box-shadow;
+      border-radius:6px;
+      align-items:center;
+      justify-content:center;
+    }
+  }
+  divider {
+    background-color:unset;
+  }
+  sv {
+    border:1px solid white;
+    box-shadow:@box-shadow;
+    &:hover {
+      box-shadow:@box-shadow inset;
+    }
+  }
+</script>

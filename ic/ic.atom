@@ -1,0 +1,25 @@
+<div name="drop-item">
+    <script>
+        const $this=this;
+        const id = uuid(16);
+        const dropFunc = Atom.evalExp(host.attr('drop'));
+        host.draggable=true;
+        host.compile=function (scope,ctx,state,compileNodes){
+            Atom.shareData[id] = dropFunc(scope); 
+            final(()=>{
+                watchInDomTree(host,function(){
+                    delete Atom.shareData[id];
+                });
+            });
+            host.ondragstart=function (e) {
+                var dt=e.dataTransfer;
+                dt.effectAllowed = "move";
+                dt.setData('data',id);
+            };
+            $this.append(...host.childNodes);
+            if($this.hasChildNodes()){
+                return compileNodes(scope,ctx,state,...$this.childNodes);
+            }
+        }
+    </script>
+</div>

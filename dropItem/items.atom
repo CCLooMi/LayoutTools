@@ -1,0 +1,5 @@
+<div icon="fan-loading">
+    <script>
+        console.log(arguments);        
+    </script>
+</div>

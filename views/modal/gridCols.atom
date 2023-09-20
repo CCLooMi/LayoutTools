@@ -1,0 +1,20 @@
+<div style="padding: 1%">
+    <cc-form v>
+        <in type="text" label="Grid-template-columns"
+        cc-model="gridCols"
+        cc-require=":Grid-template-columns cannot be empty！"></in>
+        <in type="radio" label="ColsTemplate">
+            <label value="220px | 1fr" cc-model="gridCols">220px (divider) 1fr</label>
+            <label value="220px | auto" cc-model="gridCols">220px (divider) auto</label>
+            <label value="1fr | 1fr" cc-model="gridCols">1fr (divider) 1fr</label>
+            <label value="220px 1fr" cc-model="gridCols">220px 1fr</label>
+            <label value="220px auto" cc-model="gridCols">220px auto</label>
+            <label value="repeat(auto-fit,minmax(60px,auto))" cc-model="gridCols">
+                repeat(auto-fit,minmax(60px,auto))
+            </label>
+            <label value="repeat(auto-fill,minmax(60px,auto))" cc-model="gridCols">
+                repeat(auto-fill,minmax(60px,auto))
+            </label>
+        </in>
+    </cc-form>
+</div>

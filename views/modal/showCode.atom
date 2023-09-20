@@ -1,0 +1,32 @@
+<div style="padding: 1%;display: grid;height: inherit;">
+  <cc-form v>
+    <form-group label="Code" style="grid-template-rows: 1fr">
+      <form-input style="height: 100%">
+        <textarea type="text" editor="html" cc-model="code"></textarea>
+      </form-input>
+    </form-group>
+    <style>
+      form {
+        display: grid;
+        height: 100%;
+        grid-template-rows: 1fr;
+      }
+      .quick-input-titlebar {
+        display: none !important;
+      }
+      .suggest-details-container{
+        left: 0 !important;
+        top: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+        display: grid !important;
+      }
+      .suggest-details{
+        width: 60% !important;
+        justify-self: center;
+        align-self: center;
+        display: grid;
+      }
+    </style>
+  </cc-form>
+</div>
