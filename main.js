@@ -11,7 +11,7 @@
         ld('ic-monaco').then(resolve, reject);
     }));
     app.directive('drop-area', function () {
-        const tgList = [];
+        const undoList = [];
         return {
             restrict: 'A',
             link: function (scope, ele, attrs) {
@@ -22,12 +22,11 @@
                 };
                 ele.ondrop = function (e) {
                     e.preventDefault();
-                    const target = e.target;
                     const df = e.dataTransfer;
                     const func = Atom.shareData[df.getData('data')];
                     if (func instanceof Function) {
-                        tgList.push(target);
-                        return func(target);
+                        func(e,undoList);
+                        return;
                     }
                 }
                 attacheEvent(document)
@@ -35,7 +34,9 @@
                         if (e.ctrlKey && e.key == 'z') {
                             e.preventDefault();
                             e.stopPropagation();
-                            tgList.pop()?.undo();
+                            if(undoList.length){
+                                undoList.pop()();
+                            }
                         }
                     })
                     .getDispose(function (dsp) {

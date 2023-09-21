@@ -40,12 +40,19 @@
                 }
             }
         }
+        function getSV(ele){
+            if(!ele instanceof Node){
+                return;
+            }
+            if(ele.localName=='sv'){
+                return ele;
+            }
+            return getSV(ele.parentElement);
+        }
         scope.items = [{
             icon: $icons.isvg('grid-rows'),
-            drop: function (target) {
-                if (target.hasClass('divider')) {
-                    target = target.parentElement;
-                }
+            drop: function (e,undoList) {
+                const target = getSV(e.target);
                 var grid = { gridRows: '', rows: [] };
                 var unwatch = Atom.watchChange(grid, 'gridRows', function (ov, nv) {
                     grid.rows = nv.split(reg);
@@ -63,9 +70,6 @@
                     .scope(grid)
                     .width(555)
                     .ok(function () {
-                        if (target.undo) {
-                            target.undo();
-                        }
                         var ds = grid.rows
                         var es = [];
                         for (var i = 0, ei; i < ds.length; i++) {
@@ -84,23 +88,21 @@
                             es.push(ei);
                         }
                         target.css('grid-template-rows', grid.rows.join(' '));
-                        target.undo = function () {
+                        undoList.push(function () {
                             for (var i = 0; i < es.length; i++) {
                                 es[i].remove();
                             }
                             es.length = 0;
                             this.css('grid-template-rows', '');
-                        }
+                        }.bind(target));
                     })
                     .cancel(() => 0)
                     .onDestroy(unwatch);
             }
         }, {
             icon: $icons.isvg('grid-columns'),
-            drop: function (target) {
-                if (target.localName=='divider') {
-                    target = target.parentElement;
-                }
+            drop: function (e,undoList) {
+                const target = getSV(e.target);
                 var grid = { gridCols: '', cols: [] };
                 var unwatch = Atom.watchChange(grid, 'gridCols', function (ov, nv) {
                     grid.cols = nv.split(reg);
@@ -117,9 +119,6 @@
                     .scope(grid)
                     .width(555)
                     .ok(function () {
-                        if (target.undo) {
-                            target.undo();
-                        }
                         var ds = grid.cols;
                         var es = [];
                         for (var i = 0, ei; i < ds.length; i++) {
@@ -141,24 +140,22 @@
                         if (!target.style.gridTemplateRows) {
                             target.css('grid-template-rows', '1fr');
                         }
-                        target.undo = function () {
+                        undoList.push(function () {
                             for (var i = 0; i < es.length; i++) {
                                 es[i].remove();
                             }
                             es.length = 0;
                             this.css('grid-template-columns', '');
                             this.css('grid-template-rows', '');
-                        }
+                        }.bind(target));
                     })
                     .cancel(() => 0)
                     .onDestroy(unwatch);
             }
         }, {
             icon: $icons.isvg('grid-layout'),
-            drop: function (target) {
-                if (target.localName=='divider') {
-                    target = target.parentElement;
-                }
+            drop: function (e,undoList) {
+                const target = getSV(e.target);
                 var grid = { gridRows: '', gridCols: '', cols: [], rows: [] };
                 var unwatchRows = Atom.watchChange(grid, 'gridRows', function (ov, nv) {
                     grid.rows = nv.split(reg);
@@ -185,9 +182,6 @@
                     .scope(grid)
                     .width(555)
                     .ok(function () {
-                        if (target.undo) {
-                            target.undo();
-                        }
                         var cols = grid.cols, rows = grid.rows;
                         var es = [];
                         for (var i = 0, ri; i < rows.length; i++) {
@@ -231,14 +225,14 @@
                         if (!target.style.gridTemplateRows) {
                             target.css('grid-template-rows', '1fr');
                         }
-                        target.undo = function () {
+                        undoList.push(function () {
                             for (var i = 0; i < es.length; i++) {
                                 es[i].remove();
                             }
                             es.length = 0;
                             this.css('grid-template-columns', '');
                             this.css('grid-template-rows', '');
-                        }
+                        }.bind(target));
                     })
                     .cancel(() => 0)
                     .onDestroy(() => (unwatchCols(), unwatchRows()));

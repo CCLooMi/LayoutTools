@@ -45,7 +45,7 @@
     }
     app.factory('S_itemLoader', ['$http', '$icons', function ($http, $icons) {
         function genItem(icon, script, deps, style, body, app) {
-            var aa = ['target', 'style', 'body', 'ce', 'cdf', ...deps];
+            var aa = ['$event','undoList', 'style', 'body', 'ce', 'cdf', ...deps];
             var aaFunc = newFunc(script, ...aa);
             var ps = [aaFunc];
             ps.push(new Promise(function (resolve) {
@@ -62,14 +62,14 @@
                 if (Array.isArray(deps)) {
                     return {
                         icon: $icons.isvg(icon),
-                        drop: function (target) {
-                            aaFunc(target, style, body, ce, cdf, ...deps || []);
+                        drop: function (event,undoList) {
+                            aaFunc(event,undoList,style, body, ce, cdf, ...deps || []);
                         }
                     };
                 }
                 return {
                     icon: $icons.isvg(icon),
-                    drop: function (target) {
+                    drop: function () {
                         console.warn(deps);
                     }
                 };

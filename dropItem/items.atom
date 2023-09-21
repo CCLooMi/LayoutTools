@@ -1,10 +1,11 @@
 <div icon="fan-loading">
     <h1>Hi,Loading</h1>
     <script>
-        console.log([target,style,body,ce,cdf]);
+        console.log([$event,undoList,style,body,ce,cdf]);
+        const target=$event.target;
         target.html(body);
-        target.undo = function (){
+        undoList.push(function (){
             target.html('');
-        }
+        });
     </script>
 </div>
