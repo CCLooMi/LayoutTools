@@ -43,4 +43,9 @@
       box-shadow:@box-shadow inset;
     }
   }
+  cc-form{
+    &:hover{
+      background-color:rgba(0,0,0,0.1);
+    }
+  }
 </script>

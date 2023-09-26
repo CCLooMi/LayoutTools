@@ -240,7 +240,6 @@
         }];
         itemLoader.loadItems('dropItem/items.atom').then(function(items){
             scope.items.push(...items);
-            console.log(items);
         },console.error);
     }]);
 })(Atom.app('LayoutTools'))

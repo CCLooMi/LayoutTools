@@ -49,13 +49,13 @@
             var aaFunc = newFunc(script, ...aa);
             var ps = [aaFunc];
             ps.push(new Promise(function (resolve) {
-                app.invoke([...deps, (...deps) => { resolve(deps); }]).catch(resolve);
+                app.invoke([...deps, (...deps) => { resolve(deps); }]);
             }));
             if (style) {
                 ps.push(new Promise(function (resolve, reject) {
                     Atom.invoke(['$less', function ($less) {
                         $less.renderToStyleElement(style).then(resolve, reject);
-                    }]).catch(reject);
+                    }]);
                 }));
             }
             return Promise.all(ps).then(function ([aaFunc, deps, style]) {

@@ -1,5 +1,5 @@
-<div icon="fan-loading">
-    <h1>Hi,Loading</h1>
+<div icon="form">
+    <cc-form></cc-form>
     <script>
         console.log([$event,undoList,style,body,ce,cdf]);
         const target=$event.target;
@@ -7,5 +7,32 @@
         undoList.push(function (){
             target.html('');
         });
+    </script>
+</div>
+<div icon="input">
+    <form-group label="Name">
+        <label>Name</label>
+        <form-input>
+            <input type="text" placeholder="Name"
+                cc-model="name"
+                cc-l-max="255:Name cannot exceed 255 characters！"
+                cc-require=":Name cannot be empty！"
+                file-name=":Name cannot contain special characters！">
+        </form-input>
+    </form-group>
+    <script inject="$modal">
+        const target = $event.target;
+        const sd = target.shadowRoot||target;
+        const form = sd.findOne('form');
+        if(!form){
+            form = ce('form');
+            sd.append(form);
+        }
+        switch(target.localName){
+            case 'cc-form':
+                const nds = Atom.toNodes(body);
+                form.append(...nds);
+            break;
+        }
     </script>
 </div>
