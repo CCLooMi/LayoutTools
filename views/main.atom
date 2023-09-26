@@ -44,8 +44,7 @@
     }
   }
   cc-form{
-    &:hover{
-      background-color:rgba(0,0,0,0.1);
-    }
+    border:1px dashed red;
+    margin:4mm;
   }
 </script>

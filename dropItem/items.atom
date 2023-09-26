@@ -23,7 +23,7 @@
     <script inject="$modal">
         const target = $event.target;
         const sd = target.shadowRoot||target;
-        const form = sd.findOne('form');
+        var form = sd.findOne('form');
         if(!form){
             form = ce('form');
             sd.append(form);
@@ -31,7 +31,12 @@
         switch(target.localName){
             case 'cc-form':
                 const nds = Atom.toNodes(body);
+                const list = [...nds];
                 form.append(...nds);
+                undoList.push(function (){
+                    list.forEach(nd=>nd.remove());
+                    list.length=0;
+                });
             break;
         }
     </script>
