@@ -5,11 +5,58 @@
     function ce(name) {
         return document.createElement(name);
     }
-    app.controller('mainCtrl', ['$element', '$scope', '$modal', '$compile','$icons', 'S_itemLoader', function ($ele, scope, $md, $compile,$icons,itemLoader) {
+    const cache = {};
+    function isAutoClose(ele) {
+        var n = ele.localName;
+        if (!n) {
+            return false;
+        }
+        var r = cache[n];
+        if (r !== undefined) {
+            return r;
+        }
+        var h = ce(n).outerHTML;
+        if (h == `<${n}>`) {
+            return (cache[n] = true);
+        }
+        return (cache[n] = false);
+    }
+    function toHTML(ele, func) {
+        function _toHTML(ele, ls) {
+            var n = ele.localName;
+            if (!n) {
+                n = ele.textContent.trim();
+                n && ls.push(n);
+                return;
+            }
+            const k = func ? func(ele) : 0;
+            if(k===2){
+                return;
+            }
+            if (k !== 1) {
+                var attrs = '';
+                Array.from(ele.attributes)
+                    .forEach(attr => attrs += ` ${attr.name}="${attr.value}"`);
+                ls.push(`<${n}${attrs}>`);
+            }
+            const cds = (ele.shadowRoot || ele).childNodes;
+            for (var i = 0; i < cds.length; i++) {
+                _toHTML(cds[i], ls);
+            }
+            if (isAutoClose(ele)) {
+                return;
+            }
+            if(k!=1){
+                ls.push(`</${n}>`);
+            }
+        }
+        const ls = [];
+        _toHTML(ele, ls);
+        return ls.join('');
+    }
+    app.controller('mainCtrl', ['$element', '$scope', '$modal', '$compile', '$icons', 'S_itemLoader', function ($ele, scope, $md, $compile, $icons, itemLoader) {
         scope.showCode = function () {
-            var da = $ele.findOne('[drop-area]');
-            da = da.cloneNode(Infinity);
-            da.removeAttribute('drop-area');
+            var da = $ele.findOne('[drop-area]>sv');
             var ls = da.find('divider');
             for (var i = 0, li; i < ls.length; i++) {
                 li = ls[i];
@@ -17,13 +64,17 @@
             }
             $md.dialog('Layout Code')
                 .content(app.getPaths('views/modal/showCode.atom'))
-                .scope({ code: da?.outerHTML })
+                .scope({ code: toHTML(da,function(ele){
+                    if(ele.localName=='form'||ele.localName=='link'){
+                        return 1;
+                    }
+                })})
                 .width(999)
                 .height(450)
                 .ok(function () { });
         }
-        var reg = / +/, regs=[pxReg = /^\d+px$/,pcReg=/^\d+%$/,frReg = /^\d+fr$/,autoReg=/^auto$/];
-        function mkDivider(ds, i, attrName , ...regs) {
+        var reg = / +/, regs = [pxReg = /^\d+px$/, pcReg = /^\d+%$/, frReg = /^\d+fr$/, autoReg = /^auto$/];
+        function mkDivider(ds, i, attrName, ...regs) {
             for (var j = 0, ri; j < regs.length; j++) {
                 ri = regs[j];
                 if (ri.test(ds[i - 1])) {
@@ -40,18 +91,18 @@
                 }
             }
         }
-        function getSV(ele){
-            if(!ele instanceof Node){
+        function getSV(ele) {
+            if (!ele instanceof Node) {
                 return;
             }
-            if(ele.localName=='sv'){
+            if (ele.localName == 'sv') {
                 return ele;
             }
             return getSV(ele.parentElement);
         }
         scope.items = [{
             icon: $icons.isvg('grid-rows'),
-            drop: function (e,undoList) {
+            drop: function (e, undoList) {
                 const target = getSV(e.target);
                 var grid = { gridRows: '', rows: [] };
                 var unwatch = Atom.watchChange(grid, 'gridRows', function (ov, nv) {
@@ -59,7 +110,7 @@
                     for (var i = 0, ri; i < grid.rows.length; i++) {
                         ri = grid.rows[i];
                         if (ri == '|') {
-                            i=mkDivider(grid.rows,i,'cc-ns-resize',...regs);
+                            i = mkDivider(grid.rows, i, 'cc-ns-resize', ...regs);
                         }
                     }
                 });
@@ -101,7 +152,7 @@
             }
         }, {
             icon: $icons.isvg('grid-columns'),
-            drop: function (e,undoList) {
+            drop: function (e, undoList) {
                 const target = getSV(e.target);
                 var grid = { gridCols: '', cols: [] };
                 var unwatch = Atom.watchChange(grid, 'gridCols', function (ov, nv) {
@@ -109,7 +160,7 @@
                     for (var i = 0, ri; i < grid.cols.length; i++) {
                         ri = grid.cols[i];
                         if (ri == '|') {
-                            i = mkDivider(grid.cols,i,'cc-ew-resize',...regs);
+                            i = mkDivider(grid.cols, i, 'cc-ew-resize', ...regs);
                         }
                     }
                 });
@@ -154,7 +205,7 @@
             }
         }, {
             icon: $icons.isvg('grid-layout'),
-            drop: function (e,undoList) {
+            drop: function (e, undoList) {
                 const target = getSV(e.target);
                 var grid = { gridRows: '', gridCols: '', cols: [], rows: [] };
                 var unwatchRows = Atom.watchChange(grid, 'gridRows', function (ov, nv) {
@@ -162,7 +213,7 @@
                     for (var i = 0, ri; i < grid.rows.length; i++) {
                         ri = grid.rows[i];
                         if (ri == '|') {
-                            i = mkDivider(grid.rows,i,'cc-ns-resize',...regs);
+                            i = mkDivider(grid.rows, i, 'cc-ns-resize', ...regs);
                         }
                     }
                 });
@@ -171,7 +222,7 @@
                     for (var i = 0, ri; i < grid.cols.length; i++) {
                         ri = grid.cols[i];
                         if (ri == '|') {
-                            i = mkDivider(grid.cols,i,'cc-ew-resize',...regs);
+                            i = mkDivider(grid.cols, i, 'cc-ew-resize', ...regs);
                         }
                     }
                 });
@@ -238,8 +289,8 @@
                     .onDestroy(() => (unwatchCols(), unwatchRows()));
             }
         }];
-        itemLoader.loadItems('dropItem/items.atom').then(function(items){
+        itemLoader.loadItems('dropItem/items.atom').then(function (items) {
             scope.items.push(...items);
-        },console.error);
+        }, console.error);
     }]);
 })(Atom.app('LayoutTools'))
