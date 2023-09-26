@@ -35,20 +35,27 @@
         const target = $event.target;
         const app = Atom.app('LayoutTools');
         const sd = target.shadowRoot||target;
-        var form = sd.findOne('form');
-        if(!form){
-            form = ce('form');
-            sd.append(form);
-        }
         const scope = {};
         switch(target.localName){
             case 'cc-form':
-            const nds = Atom.toNodes(body);
-            const list = [...nds];
-            form.append(...nds);
-            undoList.push(function (){
-                list.forEach(nd=>nd.remove());
-                list.length=0;
+            var form = sd.findOne('form');
+            if(!form){
+                form = ce('form');
+                sd.append(form);
+            }
+            $modal.dialog()
+            .content(app.getPaths('views/modal/input.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){
+                const nds = Atom.toNodes(body);
+                const list = [...nds];
+                form.append(...nds);
+                undoList.push(function (){
+                    list.forEach(nd=>nd.remove());
+                    list.length=0;
+                });
             });
             break;
         }

@@ -1,26 +1,16 @@
 <sv>
     <cc-form v>
-        <form-group label="Name"><label>Name</label>
-            <form-input>
-                <input type="text"
-                 placeholder="Name"
-                cc-model="name"
-                cc-l-max="255:Name cannot exceed 255 characters！"
-                cc-require=":Name cannot be empty！"
-                file-name=":Name cannot contain special characters！">
-            </form-input>
-        </form-group>
-        <form-group label="Restrict">
-            <label>Restrict</label>
+        <form-group label="Types">
+            <label>Types</label>
             <form-input type="checkbox">
                 <label>
                     <input type="checkbox" cc-model="types[0]" value="v" name="types">Vertical
                 </label>
                 <label>
-                    <input type="checkbox" cc-model="types[1]" value='col="2"' name="types">Grid-2
+                    <input type="checkbox" cc-model="types[2]" value="flex" name="types">Flex
                 </label>
                 <label>
-                    <input type="checkbox" cc-model="types[2]" value="flex" name="types">Flex
+                    <input type="checkbox" cc-model="types[1]" value='col="2"' name="types">Grid-2
                 </label>
             </form-input>
         </form-group>
