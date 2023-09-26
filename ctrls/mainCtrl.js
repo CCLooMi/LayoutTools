@@ -30,10 +30,10 @@
                 return;
             }
             const k = func ? func(ele) : 0;
-            if(k===2){
+            if(k===2){//skip this element
                 return;
             }
-            if (k !== 1) {
+            if (k !== 1) {//skip self but not children
                 var attrs = '';
                 Array.from(ele.attributes)
                     .forEach(attr => attrs += ` ${attr.name}="${attr.value}"`);

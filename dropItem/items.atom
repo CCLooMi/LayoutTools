@@ -1,12 +1,23 @@
 <div icon="form">
-    <cc-form></cc-form>
-    <script>
+    <script inject="$modal">
         console.log([$event,undoList,style,body,ce,cdf]);
         const target=$event.target;
-        target.html(body);
-        undoList.push(function (){
-            target.html('');
-        });
+        const app = Atom.app('LayoutTools');
+        const scope = {types:['v']};
+        scope.code=function (){
+            return `<cc-form ${scope.types.filter(i=>i).join(' ')}></cc-form>`;
+        }
+        $modal.dialog()
+            .content(app.getPaths('views/modal/form.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){
+                target.html(scope.code());
+                undoList.push(function (){
+                    target.html('');
+                });
+            });
     </script>
 </div>
 <div icon="input">
@@ -22,21 +33,23 @@
     </form-group>
     <script inject="$modal">
         const target = $event.target;
+        const app = Atom.app('LayoutTools');
         const sd = target.shadowRoot||target;
         var form = sd.findOne('form');
         if(!form){
             form = ce('form');
             sd.append(form);
         }
+        const scope = {};
         switch(target.localName){
             case 'cc-form':
-                const nds = Atom.toNodes(body);
-                const list = [...nds];
-                form.append(...nds);
-                undoList.push(function (){
-                    list.forEach(nd=>nd.remove());
-                    list.length=0;
-                });
+            const nds = Atom.toNodes(body);
+            const list = [...nds];
+            form.append(...nds);
+            undoList.push(function (){
+                list.forEach(nd=>nd.remove());
+                list.length=0;
+            });
             break;
         }
     </script>
