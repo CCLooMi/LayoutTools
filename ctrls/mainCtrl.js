@@ -36,7 +36,13 @@
             if (k !== 1) {//skip self but not children
                 var attrs = '';
                 Array.from(ele.attributes)
-                    .forEach(attr => attrs += ` ${attr.name}="${attr.value}"`);
+                    .forEach(function(attr){
+                        if(attr.value){
+                            attrs += ` ${attr.name}="${attr.value}"`;
+                            return;
+                        }
+                        attrs += ` ${attr.name}`
+                    });
                 ls.push(`<${n}${attrs}>`);
             }
             const cds = (ele.shadowRoot || ele).childNodes;

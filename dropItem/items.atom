@@ -26,23 +26,27 @@
         const target = $event.target;
         const app = Atom.app('LayoutTools');
         const sd = target.shadowRoot||target;
-        const scope = {checkList:Object.keys($formCheck),checks:[],checkArgs:[],checkTips:[]};
-        body = `
-        <form-group>
-        <label>{{label}}</label>
-        <form-input>
-            <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
-        </form-input>
-        </form-group>`;
+        const scope = {
+            checkList:Object.keys($formCheck),
+            checks:[],
+            checkArgs:[],
+            checkTips:[]
+        };
+        body = `<form-group>
+    <label>{{label}}</label>
+    <form-input>
+        <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
+    </form-input>
+</form-group>`;
         const tmp = Atom.JST.parse(body);
         scope.code=function (){
             const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
                     .filter(i=>i).join(' ');
-            return tmp({label:scope.name,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr});
+            return tmp({label:scope.label,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr});
         }
         const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
-            if(ov==scope.label){
-                scope.label=nv;
+            if(ov==scope.label?.toLowerCase()){
+                scope.label=upperCaseFirst(nv);
             }
             if(ov==scope.placeholder){
                 scope.placeholder=nv;
@@ -62,7 +66,7 @@
             .height('auto')
             .ok(function(){
                 unwatch();
-                const nds = Atom.toNodes(body);
+                const nds = Atom.toNodes(scope.code());
                 const list = [...nds];
                 form.append(...nds);
                 undoList.push(function (){

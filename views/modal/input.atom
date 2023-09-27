@@ -31,10 +31,10 @@
                 </label>
                 <input-group cc-show="checks[$index]">
                     <form-input>
-                        <input type="text" cc-model="checkArgs[$index]" placeholder="CheckArg">
+                        <input type="text" cc-model="checkArgs[$index]" placeholder="arg">
                     </form-input>
                     <form-input>
-                        <input type="text" cc-model="checkTips[$index]" placeholder="ErrorTips">
+                        <input type="text" cc-model="checkTips[$index]" placeholder="tips">
                     </form-input>
                 </input-group>
             </form-input>
