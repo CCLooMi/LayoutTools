@@ -21,21 +21,33 @@
     </script>
 </div>
 <div icon="input">
-    <form-group label="Name">
-        <label>Name</label>
-        <form-input>
-            <input type="text" placeholder="Name"
-                cc-model="name"
-                cc-l-max="255:Name cannot exceed 255 characters！"
-                cc-require=":Name cannot be empty！"
-                file-name=":Name cannot contain special characters！">
-        </form-input>
-    </form-group>
-    <script inject="$modal">
+    <script inject="$modal,$formCheck">
+        console.log([$formCheck]);
         const target = $event.target;
         const app = Atom.app('LayoutTools');
         const sd = target.shadowRoot||target;
-        const scope = {};
+        const scope = {checkList:Object.keys($formCheck),checks:[],checkArgs:[],checkTips:[]};
+        body = `
+        <form-group>
+        <label>{{label}}</label>
+        <form-input>
+            <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
+        </form-input>
+        </form-group>`;
+        const tmp = Atom.JST.parse(body);
+        scope.code=function (){
+            const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
+                    .filter(i=>i).join(' ');
+            return tmp({label:scope.name,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr});
+        }
+        const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
+            if(ov==scope.label){
+                scope.label=nv;
+            }
+            if(ov==scope.placeholder){
+                scope.placeholder=nv;
+            }
+        });
         switch(target.localName){
             case 'cc-form':
             var form = sd.findOne('form');
@@ -49,6 +61,7 @@
             .width(555)
             .height('auto')
             .ok(function(){
+                unwatch();
                 const nds = Atom.toNodes(body);
                 const list = [...nds];
                 form.append(...nds);
@@ -56,6 +69,9 @@
                     list.forEach(nd=>nd.remove());
                     list.length=0;
                 });
+            })
+            .cancel(function (){
+                unwatch();
             });
             break;
         }
