@@ -23,6 +23,17 @@
                 <input type="text" placeholder="label" cc-model="label">
             </form-input>
         </form-group>
+        <form-group>
+            <label>Type</label>
+            <form-input type="radio">
+                <label>
+                    <input type="radio" cc-model="type" name="type" value="input">Input
+                </label>
+                <label>
+                    <input type="radio" cc-model="type" name="type" value="textarea">Textarea
+                </label>
+            </form-input>
+        </form-group>
         <form-group class="checks">
             <label>Checks</label>
             <form-input type="checkbox" cc-repeat="c in checkList">

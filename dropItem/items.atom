@@ -30,7 +30,8 @@
             checkList:Object.keys($formCheck),
             checks:[],
             checkArgs:[],
-            checkTips:[]
+            checkTips:[],
+            type:'input'
         };
         body = `<form-group>
     <label>{{label}}</label>
@@ -38,11 +39,22 @@
         <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
     </form-input>
 </form-group>`;
+        const body2=`<form-group>
+    <label>{{label}}</label>
+    <form-input>
+        <textarea type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}></textarea>
+    </form-input>
+</form-group>`;
         const tmp = Atom.JST.parse(body);
+        const tmp2 = Atom.JST.parse(body2);
         scope.code=function (){
             const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
                     .filter(i=>i).join(' ');
-            return tmp({label:scope.label,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr});
+            const o = {label:scope.label,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr};
+            if(scope.type=='input'){
+                return tmp(o);
+            }
+            return tmp2(o);
         }
         const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
             if(ov==scope.label?.toLowerCase()){
