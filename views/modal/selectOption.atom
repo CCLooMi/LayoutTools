@@ -1,9 +1,28 @@
 <sv class="scrollable">
     <cc-form v>
         <form-group>
-            <label>Label</label>
+            <form-input type="radio">
+                <label>
+                    <input type="radio" value="cc_options" cc-model="use">Use cc-options
+                </label>
+                <label>
+                    <input type="radio" value="cc_repeat" cc-model="use">Use cc-repeat
+                </label>
+                <label>
+                    <input type="radio" value="cc_for" cc-model="use">Use cc-for
+                </label>
+            </form-input>
+        </form-group>
+        <form-group>
+            <label>Exp</label>
             <form-input>
-                <input type="text" placeholder="label" cc-model="label">
+                <input type="text" cc-model="exp">
+            </form-input>
+        </form-group>
+        <form-group>
+            <label>OptStr</label>
+            <form-input>
+                <input type="text" cc-model="optStr">
             </form-input>
         </form-group>
     </cc-form>

@@ -105,14 +105,32 @@
             checkTips:[],
         };
         scope.addOptions=function (){
+            const unwatch = Atom.watchChange(scope,'use',function (ov,nv,obj){
+                switch(nv){
+                    case 'cc_options':
+                    scope.exp='cc-options="u.name as u for u in users"';
+                    scope.optStr='';
+                    break;
+                    case 'cc_repeat':
+                    scope.exp='cc-repeat="u in users"';
+                    scope.optStr='<option cc-value="u">{{u.name}}</option>';
+                    break;
+                    case 'cc_for':
+                    scope.exp='cc-for="u in users"';
+                    scope.optStr='<option cc-value="u">{{u.name}}</option>';
+                    break;
+                }
+            })
             $modal.dialog()
             .content(app.getPaths('views/modal/selectOption.atom'))
             .scope(scope)
             .width(555)
             .height('auto')
-            .ok(function(){})
+            .ok(function(){
+                unwatch();
+            })
             .cancel(function (){
-                
+                unwatch();
             });
         };
         scope.setChecks=function (){
@@ -129,8 +147,9 @@
         body = `<form-group>
     <label>{{label}}</label>
     <form-input type="select">
-        <select placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
+        <select placeholder="{{placeholder}}" cc-model="{{name}}" {{exp}} {{checkStr}}>
             <option value=""></option>
+            {{optStr}}
         </select>
     </form-input>
 </form-group>`;
@@ -138,7 +157,15 @@
         scope.code=function (){
             const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
                     .filter(i=>i).join(' ');
-            const o = {label:scope.label,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr};
+            const o = {
+                label:scope.label,
+                placeholder:scope.placeholder,
+                name:scope.name,
+                checkStr:checkStr,
+                exp:scope.exp,
+                use:scope.use,
+                optStr:scope.optStr
+                };
             return tmp(o);
         }
         const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
