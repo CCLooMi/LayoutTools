@@ -3,13 +3,13 @@
         <form-group>
             <form-input type="radio">
                 <label>
-                    <input type="radio" value="cc_options" cc-model="use">Use cc-options
+                    <input type="radio" value="cc-options" cc-model="use">Use cc-options
                 </label>
                 <label>
-                    <input type="radio" value="cc_repeat" cc-model="use">Use cc-repeat
+                    <input type="radio" value="cc-repeat" cc-model="use">Use cc-repeat
                 </label>
                 <label>
-                    <input type="radio" value="cc_for" cc-model="use">Use cc-for
+                    <input type="radio" value="cc-for" cc-model="use">Use cc-for
                 </label>
             </form-input>
         </form-group>
@@ -19,7 +19,7 @@
                 <input type="text" cc-model="exp">
             </form-input>
         </form-group>
-        <form-group>
+        <form-group cc-show="use&&use!='cc-options'">
             <label>OptStr</label>
             <form-input>
                 <input type="text" cc-model="optStr">

@@ -36,13 +36,13 @@
         body = `<form-group>
     <label>{{label}}</label>
     <form-input>
-        <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
+        <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}"{{checkStr?' '+checkStr:''}}>
     </form-input>
 </form-group>`;
         const body2=`<form-group>
     <label>{{label}}</label>
     <form-input>
-        <textarea type="text" placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}></textarea>
+        <textarea type="text" placeholder="{{placeholder}}" cc-model="{{name}}"{{checkStr?' '+checkStr:''}}></textarea>
     </form-input>
 </form-group>`;
         const tmp = Atom.JST.parse(body);
@@ -107,16 +107,16 @@
         scope.addOptions=function (){
             const unwatch = Atom.watchChange(scope,'use',function (ov,nv,obj){
                 switch(nv){
-                    case 'cc_options':
-                    scope.exp='cc-options="u.name as u for u in users"';
+                    case 'cc-options':
+                    scope.exp='u.name as u for u in users';
                     scope.optStr='';
                     break;
-                    case 'cc_repeat':
-                    scope.exp='cc-repeat="u in users"';
+                    case 'cc-repeat':
+                    scope.exp='u in users';
                     scope.optStr='<option cc-value="u">{{u.name}}</option>';
                     break;
-                    case 'cc_for':
-                    scope.exp='cc-for="u in users"';
+                    case 'cc-for':
+                    scope.exp='u in users';
                     scope.optStr='<option cc-value="u">{{u.name}}</option>';
                     break;
                 }
@@ -131,6 +131,9 @@
             })
             .cancel(function (){
                 unwatch();
+                scope.exp='';
+                scope.use='';
+                scope.optStr='';
             });
         };
         scope.setChecks=function (){
@@ -147,7 +150,7 @@
         body = `<form-group>
     <label>{{label}}</label>
     <form-input type="select">
-        <select placeholder="{{placeholder}}" cc-model="{{name}}" {{exp}} {{checkStr}}>
+        <select placeholder="{{placeholder}}" cc-model="{{name}}"{{exp?' '+use+'="'+exp+'"':''}}{{checkStr?' '+checkStr:''}}>
             <option value=""></option>
             {{optStr}}
         </select>
