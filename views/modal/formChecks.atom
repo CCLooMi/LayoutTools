@@ -1,0 +1,35 @@
+<sv class="scrollable">
+    <cc-form v>
+        <form-group class="checks">
+            <label>Checks</label>
+            <form-input type="checkbox" cc-repeat="c in checkList">
+                <label>
+                    <input type="checkbox" cc-model="checks[$index]" cc-value="c" name="checks">{{c}}
+                </label>
+                <input-group cc-show="checks[$index]">
+                    <form-input>
+                        <input type="text" cc-model="checkArgs[$index]" placeholder="arg">
+                    </form-input>
+                    <form-input>
+                        <input type="text" cc-model="checkTips[$index]" placeholder="tips">
+                    </form-input>
+                </input-group>
+            </form-input>
+        </form-group>
+        <style>
+            .checks {
+                grid-gap:2mm !important;
+            }
+            .checks > form-input {
+                grid-auto-columns:1fr 1fr 3fr;
+            }
+            input-group {
+                display:grid;
+                grid-template-columns:1fr 3fr;
+                grid-gap:2mm;
+                flex-grow:1;
+                margin-left:2mm;
+            }
+        </style>
+    </cc-form>
+</sv>

@@ -1,0 +1,10 @@
+<sv class="scrollable">
+    <cc-form v>
+        <form-group>
+            <label>Label</label>
+            <form-input>
+                <input type="text" placeholder="label" cc-model="label">
+            </form-input>
+        </form-group>
+    </cc-form>
+</sv>

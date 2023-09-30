@@ -57,7 +57,7 @@
             return tmp2(o);
         }
         const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
-            if(ov==scope.label?.toLowerCase()){
+            if(ov?.toLowerCase()==scope.label?.toLowerCase()){
                 scope.label=upperCaseFirst(nv);
             }
             if(ov==scope.placeholder){
@@ -73,6 +73,91 @@
             }
             $modal.dialog()
             .content(app.getPaths('views/modal/input.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){
+                unwatch();
+                const nds = Atom.toNodes(scope.code());
+                const list = [...nds];
+                form.append(...nds);
+                undoList.push(function (){
+                    list.forEach(nd=>nd.remove());
+                    list.length=0;
+                });
+            })
+            .cancel(function (){
+                unwatch();
+            });
+            break;
+        }
+    </script>
+</div>
+<div icon="select">
+    <script inject="$modal,$formCheck">
+        const target = $event.target;
+        const app = Atom.app('LayoutTools');
+        const sd = target.shadowRoot||target;
+        const scope = {
+            checkList:Object.keys($formCheck),
+            checks:[],
+            checkArgs:[],
+            checkTips:[],
+        };
+        scope.addOptions=function (){
+            $modal.dialog()
+            .content(app.getPaths('views/modal/selectOption.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){})
+            .cancel(function (){
+                
+            });
+        };
+        scope.setChecks=function (){
+            $modal.dialog()
+            .content(app.getPaths('views/modal/formChecks.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){})
+            .cancel(function (){
+                scope.checks.length=0;
+            });
+        };
+        body = `<form-group>
+    <label>{{label}}</label>
+    <form-input type="select">
+        <select placeholder="{{placeholder}}" cc-model="{{name}}" {{checkStr}}>
+            <option value=""></option>
+        </select>
+    </form-input>
+</form-group>`;
+        const tmp = Atom.JST.parse(body);
+        scope.code=function (){
+            const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
+                    .filter(i=>i).join(' ');
+            const o = {label:scope.label,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr};
+            return tmp(o);
+        }
+        const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
+            if(ov?.toLowerCase()==scope.label?.toLowerCase()){
+                scope.label=upperCaseFirst(nv);
+            }
+            if(ov==scope.placeholder){
+                scope.placeholder=nv;
+            }
+        });
+        switch(target.localName){
+            case 'cc-form':
+            var form = sd.findOne('form');
+            if(!form){
+                form = ce('form');
+                sd.append(form);
+            }
+            $modal.dialog()
+            .content(app.getPaths('views/modal/select.atom'))
             .scope(scope)
             .width(555)
             .height('auto')
