@@ -33,6 +33,17 @@
             checkTips:[],
             type:'input'
         };
+        scope.setChecks=function (){
+            $modal.dialog()
+            .content(app.getPaths('views/modal/formChecks.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){})
+            .cancel(function (){
+                scope.checks.length=0;
+            });
+        };
         body = `<form-group>
     <label>{{label}}</label>
     <form-input>
