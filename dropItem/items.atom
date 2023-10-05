@@ -278,7 +278,7 @@
                 unwatch();
                 scope.exp='';
                 scope.use='';
-                scope.optStr='';
+                scope.labelStr='';
             });
         };
         scope.setChecks=function (){
@@ -315,6 +315,7 @@
                 checkStr:checkStr,
                 exp:scope.exp,
                 use:scope.use,
+                labelStr:scope.labelStr,
                 };
             if(scope.use=='cc-repeat'){
                 return tmp2(o);
