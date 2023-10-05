@@ -114,17 +114,23 @@
             checks:[],
             checkArgs:[],
             checkTips:[],
+            use:'normal',
+            optStr:'<option value="xxx">xxxxx</option>'
         };
         scope.addOptions=function (){
             const unwatch = Atom.watchChange(scope,'use',function (ov,nv,obj){
                 switch(nv){
+                    case 'normal':
+                    scope.exp='';
+                    scope.optStr='<option value="xxx">xxxxx</option>';
+                    break;
                     case 'cc-options':
-                    scope.exp='u.name as u for u in users';
+                    scope.exp='u.id as u.name for u in users';
                     scope.optStr='';
                     break;
                     case 'cc-repeat':
-                    scope.exp='u in users';
-                    scope.optStr='<option cc-value="u">{{u.name}}</option>';
+                    scope.exp='';
+                    scope.optStr=`<option cc-repeat="u in users" cc-value="u">{{u.name}}</option>`;
                     break;
                     case 'cc-for':
                     scope.exp='u in users';
@@ -162,12 +168,20 @@
     <label>{{label}}</label>
     <form-input type="select">
         <select placeholder="{{placeholder}}" cc-model="{{name}}"{{exp?' '+use+'="'+exp+'"':''}}{{checkStr?' '+checkStr:''}}>
-            <option value=""></option>
+            {{optStr}}
+        </select>
+    </form-input>
+</form-group>`;
+        body2 = `<form-group>
+    <label>{{label}}</label>
+    <form-input type="select">
+        <select placeholder="{{placeholder}}" cc-model="{{name}}"{{checkStr?' '+checkStr:''}}>
             {{optStr}}
         </select>
     </form-input>
 </form-group>`;
         const tmp = Atom.JST.parse(body);
+        const tmp2 = Atom.JST.parse(body);
         scope.code=function (){
             const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
                     .filter(i=>i).join(' ');
@@ -180,6 +194,9 @@
                 use:scope.use,
                 optStr:scope.optStr
                 };
+            if(scope.use=='cc-repeat'){
+                return tmp2(o);
+            }
             return tmp(o);
         }
         const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
@@ -199,6 +216,128 @@
             }
             $modal.dialog()
             .content(app.getPaths('views/modal/select.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){
+                unwatch();
+                const nds = Atom.toNodes(scope.code());
+                const list = [...nds];
+                form.append(...nds);
+                undoList.push(function (){
+                    list.forEach(nd=>nd.remove());
+                    list.length=0;
+                });
+            })
+            .cancel(function (){
+                unwatch();
+            });
+            break;
+        }
+    </script>
+</div>
+<div icon="checkbox">
+    <script inject="$modal,$formCheck">
+        const target = $event.target;
+        const app = Atom.app('LayoutTools');
+        const sd = target.shadowRoot||target;
+        const scope = {
+            checkList:Object.keys($formCheck),
+            checks:[],
+            checkArgs:[],
+            checkTips:[],
+            use:'normal',
+            labelStr:'<label><input value="xxx">xxxxx</label>'
+        };
+        scope.addLabels=function (){
+            const unwatch = Atom.watchChange(scope,'use',function (ov,nv,obj){
+                switch(nv){
+                    case 'normal':
+                    scope.exp='';
+                    scope.labelStr='<label><input value="xxx">xxxxx</label>';
+                    break;
+                    case 'cc-repeat':
+                    scope.exp='';
+                    scope.labelStr='<label cc-repeat="i in list"><input value="&i">xxxxx</label>';
+                    break;
+                    case 'cc-for':
+                    scope.exp='i in list';
+                    scope.labelStr='<label><input value="&i">xxxxx</label>';
+                    break;
+                }
+            })
+            $modal.dialog()
+            .content(app.getPaths('views/modal/checkboxLabels.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){
+                unwatch();
+            })
+            .cancel(function (){
+                unwatch();
+                scope.exp='';
+                scope.use='';
+                scope.optStr='';
+            });
+        };
+        scope.setChecks=function (){
+            $modal.dialog()
+            .content(app.getPaths('views/modal/formChecks.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){})
+            .cancel(function (){
+                scope.checks.length=0;
+            });
+        };
+        body = `<form-group>
+    <label>{{label}}</label>
+    <form-input type="checkbox"{{exp?' '+use+'="'+exp+'"':''}}{{checkStr?' '+checkStr:''}}>
+        {{labelStr}}
+    </form-input>
+</form-group>`;
+        body2 = `<form-group>
+    <label>{{label}}</label>
+    <form-input type="checkbox"{{checkStr?' '+checkStr:''}}>
+        {{labelStr}}
+    </form-input>
+</form-group>`;
+        const tmp = Atom.JST.parse(body);
+        const tmp2 = Atom.JST.parse(body2);
+        scope.code=function (){
+            const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
+                    .filter(i=>i).join(' ');
+            const o = {
+                label:scope.label,
+                name:scope.name,
+                checkStr:checkStr,
+                exp:scope.exp,
+                use:scope.use,
+                };
+            if(scope.use=='cc-repeat'){
+                return tmp2(o);
+            }
+            return tmp(o);
+        }
+        const unwatch = Atom.watchChange(scope,'name',function (ov,nv,tg){
+            if(ov?.toLowerCase()==scope.label?.toLowerCase()){
+                scope.label=upperCaseFirst(nv);
+            }
+            if(ov==scope.placeholder){
+                scope.placeholder=nv;
+            }
+        });
+        switch(target.localName){
+            case 'cc-form':
+            var form = sd.findOne('form');
+            if(!form){
+                form = ce('form');
+                sd.append(form);
+            }
+            $modal.dialog()
+            .content(app.getPaths('views/modal/checkbox.atom'))
             .scope(scope)
             .width(555)
             .height('auto')

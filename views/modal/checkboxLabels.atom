@@ -6,9 +6,6 @@
                     <input type="radio" value="normal" cc-model="use">Normal
                 </label>
                 <label>
-                    <input type="radio" value="cc-options" cc-model="use">Use cc-options
-                </label>
-                <label>
                     <input type="radio" value="cc-repeat" cc-model="use">Use cc-repeat
                 </label>
                 <label>
@@ -16,16 +13,16 @@
                 </label>
             </form-input>
         </form-group>
-        <form-group cc-show="use=='cc-for'||use=='cc-options'">
+        <form-group cc-show="use=='cc-for'">
             <label>Exp</label>
             <form-input>
                 <input type="text" cc-model="exp">
             </form-input>
         </form-group>
-        <form-group cc-show="use&&use!='cc-options'">
-            <label>OptStr</label>
+        <form-group>
+            <label>LabelStr</label>
             <form-input>
-                <textarea type="text" cc-model="optStr" rows="5" style="resize:none"></textarea>
+                <textarea type="text" cc-model="labelStr" rows="5" style="resize:none"></textarea>
             </form-input>
         </form-group>
     </cc-form>

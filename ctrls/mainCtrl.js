@@ -68,15 +68,16 @@
                 li = ls[i];
                 li.removeAttribute('style');
             }
-            $md.dialog('Layout Code')
-                .content(app.getPaths('views/modal/showCode.atom'))
-                .scope({ code: toHTML(da,function(ele){
+            const code = toHTML(da,function(ele){
                     if(ele.localName=='form'||ele.localName=='link'){
                         return 1;
                     }
-                })})
+                });
+            $md.dialog('Layout Code')
+                .content(app.getPaths('views/modal/showCode.atom'))
+                .scope({ code: code})
                 .width(999)
-                .height(450)
+                .height(555)
                 .ok(function () { });
         }
         var reg = / +/, regs = [pxReg = /^\d+px$/, pcReg = /^\d+%$/, frReg = /^\d+fr$/, autoReg = /^auto$/];

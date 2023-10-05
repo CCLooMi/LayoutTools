@@ -1,0 +1,44 @@
+<sv class="scrollable">
+    <cc-form v>
+        <fieldset>
+            <legend>
+                <btn-group>
+                    <a class="btn btn-glass" cc-click="addLabels()">AddLabels</a>
+                    <a class="btn btn-glass" cc-click="setChecks()">SetChecks</a>
+                </btn-group>
+            </legend>
+            <form-group>
+                <label>Name</label>
+                <form-input>
+                    <input type="text"
+                placeholder="name"
+                cc-model="name"
+                cc-l-max="255:Name cannot exceed 255 characters！"
+                cc-require=":Name cannot be empty！"
+                file-name=":Name cannot contain special characters！">
+                </form-input>
+            </form-group>
+            <form-group>
+                <label>Placeholder</label>
+                <form-input>
+                    <input type="text" placeholder="placeholder" cc-model="placeholder">
+                </form-input>
+            </form-group>
+            <form-group>
+                <label>Label</label>
+                <form-input>
+                    <input type="text" placeholder="label" cc-model="label">
+                </form-input>
+            </form-group>
+            <form-group>
+                <label>DefaultValue</label>
+                <form-input>
+                    <input type="text" placeholder="defaultValue" cc-model="defaultValue">
+                </form-input>
+            </form-group>
+            <form-group>
+                <pre>{{code()}}</pre>
+            </form-group>
+        </fieldset>
+    </cc-form>
+</sv>
