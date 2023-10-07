@@ -1,4 +1,4 @@
-<sv class="scrollable">
+<s-v class="scrollable">
     <cc-form v>
         <form-group>
             <form-input type="radio">
@@ -29,4 +29,4 @@
             </form-input>
         </form-group>
     </cc-form>
-</sv>
+</s-v>

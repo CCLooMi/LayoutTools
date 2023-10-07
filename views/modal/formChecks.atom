@@ -1,4 +1,4 @@
-<sv class="scrollable">
+<s-v class="scrollable">
     <cc-form v>
         <form-group class="checks">
             <label>Checks</label>
@@ -32,4 +32,4 @@
             }
         </style>
     </cc-form>
-</sv>
+</s-v>

@@ -1,4 +1,4 @@
-<sv class="scrollable">
+<s-v class="scrollable">
     <cc-form v>
         <fieldset>
             <legend>
@@ -41,4 +41,4 @@
             </form-group>
         </fieldset>
     </cc-form>
-</sv>
+</s-v>

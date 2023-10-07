@@ -62,7 +62,7 @@
     }
     app.controller('mainCtrl', ['$element', '$scope', '$modal', '$compile', '$icons', 'S_itemLoader', function ($ele, scope, $md, $compile, $icons, itemLoader) {
         scope.showCode = function () {
-            var da = $ele.findOne('[drop-area]>sv');
+            var da = $ele.findOne('[drop-area]>s-v');
             var ls = da.find('divider');
             for (var i = 0, li; i < ls.length; i++) {
                 li = ls[i];
@@ -79,6 +79,9 @@
                 .width(999)
                 .height(555)
                 .ok(function () { });
+        }
+        scope.newItem = function (){
+            console.log('new item');
         }
         var reg = / +/, regs = [pxReg = /^\d+px$/, pcReg = /^\d+%$/, frReg = /^\d+fr$/, autoReg = /^auto$/];
         function mkDivider(ds, i, attrName, ...regs) {
@@ -102,7 +105,7 @@
             if (!ele instanceof Node) {
                 return;
             }
-            if (ele.localName == 'sv') {
+            if (ele.localName == 's-v') {
                 return ele;
             }
             return getSV(ele.parentElement);
@@ -141,7 +144,7 @@
                                 $compile(ei);
                                 continue;
                             }
-                            ei = ce('sv');
+                            ei = ce('s-v');
                             target.append(ei);
                             es.push(ei);
                         }
@@ -190,7 +193,7 @@
                                 $compile(ei);
                                 continue;
                             }
-                            ei = ce('sv');
+                            ei = ce('s-v');
                             target.append(ei);
                             es.push(ei);
                         }
@@ -271,7 +274,7 @@
                                     $compile(ci);
                                     continue;
                                 }
-                                ci = ce('sv');
+                                ci = ce('s-v');
                                 target.append(ci);
                                 es.push(ci);
                             }
