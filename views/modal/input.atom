@@ -30,7 +30,7 @@
                 </form-input>
             </form-group>
             <form-group>
-                <label>Type</label>
+                <label>Use</label>
                 <form-input type="radio">
                     <label>
                     <input type="radio" cc-model="type" name="type" value="input">Input
@@ -38,6 +38,54 @@
                     <label>
                     <input type="radio" cc-model="type" name="type" value="textarea">Textarea
                 </label>
+                </form-input>
+            </form-group>
+            <form-group cc-show="type!='textarea'">
+                <label>DataType</label>
+                <form-input type="radio">
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="text">Text
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="search">Search
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="password">Password
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="number">Number
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="date">Date
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="datetime-local">DateTime
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="month">Month
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="week">Week
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="time">Time
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="color">Color
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="range">Range
+                    </label>
+                    <label>
+                        <input type="radio" cc-model="dataType" name="dataType" value="reset">Reset
+                    </label>
+                </form-input>
+            </form-group>
+            <form-group cc-show="dataType=='range'">
+                <label>Range</label>
+                <form-input style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr;">
+                    <input type="number" placeholder="min" cc-model="rangeMin">
+                    <input type="number" placeholder="max" cc-model="rangeMax">
                 </form-input>
             </form-group>
             <form-group>

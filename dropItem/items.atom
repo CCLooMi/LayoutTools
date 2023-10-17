@@ -31,7 +31,10 @@
             checks:[],
             checkArgs:[],
             checkTips:[],
-            type:'input'
+            type:'input',
+            dataType: 'text',
+            rangeMin:0,
+            rangeMax:100,
         };
         scope.setChecks=function (){
             $modal.dialog()
@@ -47,21 +50,32 @@
         body = `<form-group>
     <label>{{label}}</label>
     <form-input>
-        <input type="text" placeholder="{{placeholder}}" cc-model="{{name}}"{{checkStr?' '+checkStr:''}}>
+        <input{{attrStr?' '+attrStr:''}}>
     </form-input>
 </form-group>`;
         const body2=`<form-group>
     <label>{{label}}</label>
     <form-input>
-        <textarea type="text" placeholder="{{placeholder}}" cc-model="{{name}}"{{checkStr?' '+checkStr:''}}></textarea>
+        <textarea{{attrStr?' '+attrStr:''}}></textarea>
     </form-input>
 </form-group>`;
         const tmp = Atom.JST.parse(body);
         const tmp2 = Atom.JST.parse(body2);
         scope.code=function (){
-            const checkStr=scope.checks.map((c,i)=>{if(c){return `${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`}})
-                    .filter(i=>i).join(' ');
-            const o = {label:scope.label,placeholder:scope.placeholder,name:scope.name,checkStr:checkStr};
+            const attrStrs = [];
+            if(scope.type!='textarea'){
+                attrStrs.push(`type="${scope.dataType}"`);
+            }
+            attrStrs.push(`placeholder="${scope.placeholder}"`,`cc-model="${scope.name}"`);
+            if(scope.dataType=='range'){
+                attrStrs.push(`min="${scope.rangeMin||0}"`,`max="${scope.rangeMax||100}"`)
+            }
+            scope.checks.forEach((c,i)=>{
+                if(c){
+                    attrStrs.push(`${c}="${scope.checkArgs[i]||''}:${scope.checkTips[i]||''}"`);
+                }
+            });
+            const o = {attrStr:attrStrs.join(' '),parent:scope};
             if(scope.type=='input'){
                 return tmp(o);
             }
