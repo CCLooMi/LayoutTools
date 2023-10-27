@@ -29,9 +29,9 @@
     grid-template-rows:repeat(auto-fit,70px);
     grid-gap:12px;
     padding:12px;
-    drop-item{
-      display: block;
-    }
+    // drop-item{
+    //   display: block;
+    // }
     .btn {
       box-shadow: @box-shadow;
       border-radius:6px;

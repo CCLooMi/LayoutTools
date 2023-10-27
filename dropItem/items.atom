@@ -510,3 +510,43 @@
         }
     </script>
 </div>
+<div icon="file-upload">
+    <script inject="$modal,$formCheck">
+        const target = $event.target;
+        const app = Atom.app('LayoutTools');
+        const sd = target.shadowRoot||target;
+        const scope = {
+            checkList:Object.keys($formCheck),
+            checks:[],
+            checkArgs:[],
+            checkTips:[],
+        };
+        switch(target.localName){
+            case 'cc-form':
+            var form = sd.findOne('form');
+            if(!form){
+                form = ce('form');
+                sd.append(form);
+            }
+            $modal.dialog()
+            .content(app.getPaths('views/modal/fileupload.atom'))
+            .scope(scope)
+            .width(555)
+            .height('auto')
+            .ok(function(){
+                // unwatch();
+                // const nds = Atom.toNodes(scope.code());
+                // const list = [...nds];
+                // form.append(...nds);
+                // undoList.push(function (){
+                //     list.forEach(nd=>nd.remove());
+                //     list.length=0;
+                // });
+            })
+            .cancel(function (){
+                // unwatch();
+            });
+            break;
+        }
+    </script>
+</div>
