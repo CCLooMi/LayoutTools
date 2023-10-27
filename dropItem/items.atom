@@ -521,6 +521,12 @@
             checkArgs:[],
             checkTips:[],
         };
+        scope.fileSelect = function (files){
+            console.log(files);
+        }
+        scope.onComplete=function (){
+            console.log('uploadComplete');
+        }
         switch(target.localName){
             case 'cc-form':
             var form = sd.findOne('form');

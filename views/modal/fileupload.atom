@@ -33,7 +33,11 @@
             <form-group>
                 <label>icons</label>
                 <form-input type="file">
-                    <ul cc-file cc-drop></ul>
+                    <ul cc-file cc-drop
+                    multiple = "true"
+                    file-select="fileSelect"
+                    on-complete="onComplete"
+                    upload-url="ws://localhost:4040/fileUp"></ul>
                 </form-input>
             </form-group>
             <form-group>
